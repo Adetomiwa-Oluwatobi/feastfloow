@@ -1,0 +1,42 @@
+{% extends 'base_dashboard.html' %}
+
+    {% block dashboard_content %}
+    <h2>My Dashboard</h2>
+    <h3>Recent Posts</h3>
+    <div class="list-post-container">
+        {% for post in posts %}
+        <a href="{% url 'posts:post_detail' post.id %}" class="post-card">
+            <div class="list-post-image">
+                {% if post.image %}
+                <img src="{{ post.image.url }}" alt="{{ post.title }}" />
+                {% elif post.video %}
+                <video controls muted>
+                    <source src="{{ post.video.url }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                {% endif %}
+            </div>
+            <div class="list-post-content">
+                <h4>{{ post.title }}</h4>
+                <p>{{ post.content|truncatewords:20 }}</p>
+            </div>
+        </a>
+        {% empty %}
+        <p>No posts available</p>
+        {% endfor %}
+    </div>
+
+    <h3>Teams</h3>
+    <ul>
+        {% for team in teams %}
+        <li>{{ team.name }} - <a href="{% url 'teams:team_dashboard' %}">Manage Team</a></li>
+        {% endfor %}
+    </ul>
+
+    <h3>Pending Requests</h3>
+    <ul>
+        {% for request in requests %}
+        <li>{{ request }} - <a href="#">View Request</a></li>
+        {% endfor %}
+    </ul>
+    {% endblock %}

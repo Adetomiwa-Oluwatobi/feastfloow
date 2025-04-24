@@ -1,0 +1,151 @@
+
+{% extends 'base.html' %}
+
+
+{% block title %}Newsfeed - FeastFlow{% endblock %}
+
+{% block content %}
+    <div class="newsfeed-container">
+        <h2>Newsfeed</h2>
+
+        <!-- Button to create a new post -->
+        <div class="create-post-button">
+            <a href="{% url 'posts:post_create' %}" class="btn btn-primary">Create a New Post</a>
+        </div>
+
+        <!-- Display Posts -->
+        <div class="posts-list">
+            {% for post in posts %}
+            <div class="post-item">
+                <div class="post-header">
+                    <div class="user-profile">
+                        <a href="{% url 'users:profile' post.author%}">
+                            {% if post.author.userprofile.picture %}
+                                <img src="{{ post.author.userprofile.picture.url }}" alt="Profile Picture" class="profile-pic">
+                            {% else %}
+                                <div class="profile-pic-placeholder"></div>
+                            {% endif %}
+                            <p class="username">{{ post.author.username }}</p>
+                        </a>
+                    </div>
+                    <span class="post-time">{{ post.created_at|timesince }}</span>
+                </div>
+            
+                <div class="post-content">
+                    <p>{{ post.content }}</p>
+                    {% if post.image %}
+                        <img src="{{ post.image.url }}" alt="Post Image" class="post-image">
+                    {% endif %}
+                    {% if post.video %}
+                        <video controls class="post-video">
+                            <source src="{{ post.video.url }}" type="video/mp4">
+                        </video>
+                    {% endif %}
+                </div>
+            
+                <div class="post-actions">
+                    <button class="like-btn" data-post-id="{{ post.id }}" onclick="likePost(this)">
+                        <i class="fa {% if post.post_likes.count %} fa-heart {% else %} fa-heart-o {% endif %}"></i> 
+                        <span class="like-count">{{ post.post_likes.count }}</span> Likes
+                    </button>
+                    <button class="comment-btn" data-post-id="{{ post.id }}">💬 Comment</button>
+                </div>
+                
+                <!-- Comment form -->
+                <form method="POST" class="comment-form" id="comment-form-{{ post.id }}" onsubmit="submitComment(event, {{ post.id }})">
+                    {% csrf_token %}
+                    <input type="text" name="content" placeholder="Add a comment..." required>
+                    <button type="submit">Post</button>
+                </form>
+            
+                <!-- Comments section (this is where new comments will be appended) -->
+                <div class="post-comments" id="comments-{{ post.id }}">
+                    {% for comment in post.post_comments.all %}
+                        <div class="comment">
+                            <div class="user-profile">
+                                <a href="{% url 'users:profile' comment.author.id %}">
+                                    {% if comment.author.userprofile.picture %}
+                                        <img src="{{ comment.author.userprofile.picture.url }}" alt="Profile Picture" class="profile-pic">
+                                    {% else %}
+                                        <div class="profile-pic-placeholder"></div>
+                                 
+                                    {% endif %}
+                                </a>
+                                <strong>{{ comment.author.username }}:</strong>
+                               
+                            </div>
+                                    
+                            <p>{{ comment.content }}</p>
+                            <span>{{ comment.created_at|timesince }}</span>
+                        </div>
+                    {% empty %}
+                        <p>No comments yet.</p>
+                    {% endfor %}
+                </div>
+            
+            </div>
+            {% empty %}
+                <p>No posts available yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        function likePost(button) {
+            const postId = button.dataset.postId;
+            fetch(`/posts/like/${postId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                const likeCount = button.querySelector('.like-count');
+                likeCount.textContent = data.like_count; // Update like count
+                const icon = button.querySelector('i');
+                icon.classList.toggle('fa-heart-o');
+                icon.classList.toggle('fa-heart');
+            });
+        }
+
+        function submitComment(event, postId) {
+            event.preventDefault();  // Prevent form submission from refreshing the page
+            
+            const content = document.querySelector(`#comment-form-${postId} input[name="content"]`).value.trim();  // Ensure no extra spaces
+            console.log("Comment content:", content);  // Log content to check its value
+            
+            if (!content) {
+                alert("Comment cannot be empty.");
+                return;  // Don't send empty content
+            }
+        
+            fetch(`/posts/comment/${postId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                },
+                body: JSON.stringify({ content: content })  // Send content as part of JSON body
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    // Handle successful comment submission
+                    const commentsSection = document.querySelector(`#comments-${postId}`);
+                    const newComment = `<div class="comment">
+                                            <strong>${data.author}:</strong>
+                                            <p>${data.content}</p>
+                                            <span>${data.created_at}</span>
+                                         </div>`;
+                    commentsSection.innerHTML += newComment;  // Add new comment to comments section
+                    // Optionally, clear the comment input field
+                    document.querySelector(`#comment-form-${postId} input[name="content"]`).value = '';
+                }
+            });
+        }
+    </script>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends 'base_dashboard.html' %}
+
+{% block dashboard_content %}
+{% load custom_filters %}
+<div class="review-form-container">
+    <h3>Leave a Review for {{ user_profile.user.username }}</h3>
+    <form method="POST" action="">
+        {% csrf_token %}
+
+        <!-- Star Rating -->
+        <div class="star-rating" data-rating="0">
+            <span class="star" data-value="1">&#9733;</span>
+            <span class="star" data-value="2">&#9733;</span>
+            <span class="star" data-value="3">&#9733;</span>
+            <span class="star" data-value="4">&#9733;</span>
+            <span class="star" data-value="5">&#9733;</span>
+        </div>
+        <p id="rating-message"></p>
+        <input type="hidden" id="rating-input" name="rating" value="0"> <!-- Store selected rating -->
+
+        <!-- Text Area for Review -->
+        <label for="id_review_text">Your Review:</label>
+        {{ review_form.review_text }}
+
+        <button type="submit" class="submit-review-btn">Submit Review</button>
+    </form>
+</div>
+
+<!-- JavaScript for Interactive Star Rating -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const stars = document.querySelectorAll('.star-rating .star');
+        const ratingInput = document.getElementById('rating-input');
+        const ratingMessage = document.getElementById('rating-message');
+
+        stars.forEach((star, index) => {
+            // Hover effect
+            star.addEventListener('mouseover', function () {
+                setStars(index + 1);
+            });
+
+            // Reset to current rating on mouse out
+            star.addEventListener('mouseout', function () {
+                setStars(parseInt(ratingInput.value));
+            });
+
+            // Click to set rating
+            star.addEventListener('click', function () {
+                const rating = index + 1;
+                ratingInput.value = rating;
+                setStars(rating);
+                displayRatingMessage(rating);
+            });
+        });
+
+        function setStars(rating) {
+            stars.forEach((star, index) => {
+                star.classList.toggle('selected', index < rating);
+            });
+        }
+
+        function displayRatingMessage(rating) {
+            const messages = ["Poor", "Fair", "Good", "Very Good", "Excellent"];
+            ratingMessage.textContent = messages[rating - 1] || "";
+        }
+    });
+</script>
+{% endblock %}

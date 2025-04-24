@@ -1,0 +1,840 @@
+:root {
+    --primary-color: #dd3333;; /* Fresh Green  #4CAF50 */
+    --secondary-color: #27213c; /* Energetic Red */
+    --background-color: #F5F5F5; /* Light Gray */
+    --sidebar-bg-color: #dfdbdb; /* Dark Gray */
+    --text-color: #FFFFFF; /* White for sidebar */
+    --hover-color: #9C27B0; /* Elegant Purple */
+   
+    /* Dark Mode Colors */
+    --dark-background-color: #1E1E1E; /* Dark Gray */
+    --almost-black: #121212; /* Almost Black */
+    --light-text-color: #EAEAEA; /* Light Gray */
+    --muted-beige: #A39E92; /* Muted Beige */
+    --accent-color: #3ABF9E; /* Darker Green */
+}
+
+/* Global Styles */
+body {
+   
+    font-family: 'Poppins', sans-serif;
+    margin: 10;
+    padding: 10;
+    background-color: var(--background-color);
+}
+
+/* Navbar Styling */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    z-index: 1000; /* Keeps navbar on top */
+    padding: 15px 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Navbar Items */
+.navbar ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-item {
+    margin: 0 20px;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: #333333; /* Default text color */
+    font-size: 16px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.nav-link i {
+    font-size: 20px;
+    margin-right: 8px;
+    color: var(--primary-color); /* Primary color for icons */
+}
+
+/* Hover Effects */
+.nav-link:hover {
+    color: var(--primary-color); /* Text color change on hover */
+}
+
+.nav-link:hover i {
+    transform: scale(1.1); /* Icon size increase on hover */
+}
+
+/* Active state styling */
+.nav-link.active {
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+/* Optional: Mobile Responsiveness */
+@media (max-width: 768px) {
+    .navbar ul {
+        flex-direction: column;
+        align-items: center;
+    }
+    .body{
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+/* Heading Styles */
+h1, h2, h3 {
+    color: var(--primary-color);
+}
+
+/* Button Styling */
+button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 18px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+    background-color: var(--secondary-accent-color);
+    transform: translateY(-2px);
+}
+
+button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(72, 207, 173, 0.4);
+}
+
+/* Card Styling */
+.card {
+    background-color: var(--light-background-color);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 15px 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Input and Textarea Styling */
+input[type="text"], input[type="email"], input[type="password"], textarea {
+    width: 100%;
+    padding: 10px 15px;
+    margin: 8px 0;
+    border-radius: 5px;
+    border: 1px solid var(--muted-beige);
+    background-color: #fff;
+    transition: border-color 0.3s;
+}
+
+input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, textarea:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 5px rgba(72, 207, 173, 0.3);
+}
+
+/* General Newsfeed Container */
+.newsfeed-container {
+    width: 100%;
+    max-width: 700px;
+    margin: 20px auto;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.create-post-button {
+    text-align: right;
+}
+
+.create-post-button .btn {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.create-post-button .btn:hover {
+    background-color: var(--secondary-accent-color);
+}
+
+/* Post Styling */
+.post-item {
+    background-color: #fff;
+    border: 1px solid #e6e6e6;
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+}
+
+.user-profile .profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.profile-pic-placeholder {
+    width: 40px;
+    height: 40px;
+    background-color: #ccc;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.username {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.post-time {
+    font-size: 12px;
+    color: #8e8e8e;
+}
+
+.post-content {
+    margin-top: 10px;
+}
+
+.post-content p {
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.post-image, .post-video {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    margin-top: 10px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+/* Post Actions */
+.post-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.like-btn {
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: var(--primary-color); /* Change from blue to primary color */
+    cursor: pointer;
+}
+
+.like-btn i {
+    margin-right: 5px;
+}
+
+.comment-btn {
+    background: none;
+    border: none;
+    font-size: 14px;
+    color: var(--primary-color); /* Change from blue to primary color */
+    cursor: pointer;
+}
+
+.comment-btn:hover {
+    text-decoration: underline;
+}
+
+/* Comment Form */
+.comment-form {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.comment-form input {
+    width: 90%;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #e6e6e6;
+    border-radius: 20px;
+    margin-right: 10px;
+}
+
+.comment-form button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    font-size: 14px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.comment-form button:hover {
+    background-color: var(--secondary-accent-color);
+}
+
+/* Comments Section */
+.post-comments {
+    margin-top: 20px;
+}
+
+.comment {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.comment strong {
+    font-weight: bold;
+    color: var(--primary-color); /* Change from blue to primary color */
+}
+
+.comment span {
+    font-size: 12px;
+    color: #8e8e8e;
+    margin-left: 5px;
+}
+
+.comment p {
+    margin: 5px 0;
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+    .newsfeed-container {
+        padding: 15px;
+    }
+
+    .create-post-button .btn {
+        padding: 8px 12px;
+    }
+}
+
+
+
+/* Profile Container */
+/* Profile Container */
+/* Profile Container */
+.profile-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    
+}
+
+
+/* Cover Photo */
+.cover-photo {
+    position: relative;
+    width: 100%;
+    height: 250px;
+    overflow: hidden;
+    background-color: #e0e0e0;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.cover-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.cover-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #777;
+    font-size: 1.2em;
+    background-color: #ddd;
+}
+
+/* Profile Picture Overlay with Partial Overlap */
+.profile-picture {
+    position: absolute;
+    bottom: -10px; /* Adjust to move it slightly below the cover photo */
+    left: 20px; /* Position on the left side */
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid white; /* Adds a white border to separate it from the background */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.profile-picture img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Profile Info */
+.profile-info {
+    margin-top: 60px; /* Adjusted to prevent overlap with the profile picture */
+    text-align: left;
+}
+
+.profile-info h2 {
+    font-size: 1.8em;
+    color: #333;
+    margin: 10px 0;
+}
+
+.profile-bio {
+    font-size: 1.1em;
+    color: #555;
+    margin-top: 5px;
+}
+
+.edit-profile-btn {
+    background-color: var(--secondary-color);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 0.9em;
+    margin-top: 10px;
+    display: inline-block;
+    transition: background-color 0.3s;
+}
+
+.edit-profile-btn:hover {
+    background-color: var(--primary-color);
+}
+
+/* Profile Content */
+.profile-content {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+
+
+
+
+/* Dashboard Container */
+.dashboard-container {
+    display: flex;
+    margin-top: 60px; /* Offset for fixed navbar */
+    
+}
+
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    top: 60px; /* Align with the navbar */
+    left: 0;
+    width: 220px;
+    height: 100vh;
+    background-color: #1E1E1E;
+    color: white;
+    padding-top: 20px;
+    z-index: 100; /* Ensure it doesn’t overlap the navbar */
+    transition: width 0.3s;
+}
+
+.sidebar.collapsed {
+    width: 60px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin: 10px 0;
+}
+
+.sidebar ul li a {
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+    display: block;
+    transition: color 0.3s;
+}
+
+.sidebar ul li a:hover {
+    color: var(--primary-color);
+}
+
+/* Main Content */
+.dashboard-main-content {
+    margin-left: 220px; /* Adjust based on sidebar width */
+    margin-right: 10px;
+    padding: 20px;
+   
+    transition: margin-left 0.3s;
+}
+
+.sidebar.collapsed + .dashboard-main-content {
+    margin-left: 60px;
+}
+
+/* Sidebar Toggle Button */
+.toggle-btn {
+    position: fixed;
+    top: 60px;
+    left: 0px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    z-index: 150; /* Above sidebar */
+}
+
+
+
+.post-detail-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Header Styles */
+.post-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.author-info {
+    display: flex;
+    align-items: center;
+}
+
+.author-picture {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.author-details h3 {
+    margin: 0;
+    font-size: 1.2em;
+    color: #333;
+}
+
+.post-date {
+    font-size: 0.9em;
+    color: #777;
+}
+
+/* Content Styles */
+.post-content h2 {
+    font-size: 1.8em;
+    margin-top: 0;
+    color: #333;
+}
+
+.post-content p {
+    font-size: 1.1em;
+    color: #555;
+    line-height: 1.6;
+    margin: 10px 0;
+}
+
+.post-image {
+    max-width: 100%;
+    margin-top: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Interaction Styles */
+.post-interactions {
+    margin-top: 20px;
+}
+
+.like-section {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.like-btn {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.like-btn:hover {
+    background-color: #45a049;
+}
+
+.like-btn.liked {
+    background-color: #f44336;
+}
+
+#like-count {
+    margin-left: 10px;
+    font-size: 1.1em;
+}
+
+/* Comment Section */
+.comment-section h3 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.comments-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.comments-list li {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.comment-date {
+    font-size: 0.8em;
+    color: #777;
+    margin-left: 5px;
+}
+
+/* New Comment Form */
+.add-comment textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+}
+
+.submit-comment {
+    margin-top: 10px;
+    padding: 8px 12px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.submit-comment:hover {
+    background-color: #45a049;
+}
+
+
+
+
+
+
+
+.profile-reviews {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+}
+
+.reviews-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.review-item {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.review-rating {
+    font-size: 1.1em;
+    color: #ff9800;
+}
+
+.review-content {
+    margin-top: 5px;
+    color: #555;
+}
+
+
+.review-card {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.review-rating {
+    display: inline-flex;
+    gap: 2px;
+}
+.star {
+    color: forestgreen;
+    font-size: 1.2em;
+}
+.empty-star {
+    color: lightgray;
+}
+
+.review-form-container {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.review-form-container h3 {
+    margin-bottom: 10px;
+}
+
+.review-form-container textarea {
+    width: 100%;
+    resize: none;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+}
+
+.submit-review-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.submit-review-btn:hover {
+    background-color: #45a049;
+}
+
+.reviews-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.review-item {
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+}
+.review_profile-pic{
+width: 50px;
+height: 50px;
+border-radius: 50%;
+margin-right: 10px;
+}
+
+
+
+.list-post-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.list-post-card {
+    display: block;
+    width: 300px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    text-decoration: none;
+    color: inherit;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.list-post-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.list-post-image img,
+.list-post-image video {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.list-post-content {
+    padding: 15px;
+}
+
+.list-post-content h4 {
+    margin: 0 0 10px;
+    font-size: 1.2rem;
+}
+
+.list-post-content p {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+

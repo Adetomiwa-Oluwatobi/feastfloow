@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Newsfeed - FeastFlow{% endblock %}
+
+{% block content %}
+<h2>Newsfeed</h2>
+<div class="posts">
+    {% for post in posts %}
+     <div>
+        <p>{{ post.content }}</p>
+        {% if post.image %}
+            <img src="{{ post.image.url }}" alt="Post image">
+        {% endif %}
+        {% if post.video %}
+            <video controls>
+                <source src="{{ post.video.url }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        {% endif %}
+     </div>
+    {% endfor %}
+</div>
+
+<!-- Pagination or Infinite Scroll can be added here -->
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends 'base_dashboard.html' %}
+
+{% block dashboard_content %}
+<div class="post-detail-container">
+    <!-- Post Header with Author Info -->
+    <div class="post-header">
+        <div class="author-info">
+            <img src="{{ post.author.userprofile.picture.url }}" alt="Author Profile Picture" class="author-picture">
+            <div class="author-details">
+                <h3>{{ post.author.username }}</h3>
+                <p class="post-date">{{ post.created_at|date:"F j, Y" }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Post Content -->
+    <div class="post-content">
+        <h2>{{ post.title }}</h2>
+        <p>{{ post.content }}</p>
+        {% if post.image %}
+            <img src="{{ post.image.url }}" alt="Post Image" class="post-image">
+        {% endif %}
+        {% if post.video %}
+            <video controls class="post-video">
+                <source src="{{ post.video.url }}" type="video/mp4">
+            </video>
+        {% endif %}
+    </div>
+
+    <!-- Post Interactions (Likes, Comments) -->
+    <div class="post-interactions">
+        <div class="like-section">
+            <button id="like-btn" class="like-btn {% if user in post.likes.all %}liked{% endif %}" onclick="toggleLike()">👍 Like</button>
+            <span id="like-count">{{ post.likes.count }}</span>
+        </div>
+
+        <div class="comment-section">
+            <h3>Comments</h3>
+            <ul class="comments-list">
+                {% for comment in post.comments.all %}
+                    <li>
+                        <strong>{{ comment.author.username }}</strong>: {{ comment.content }}
+                        <span class="comment-date">{{ comment.created_at|date:"F j, Y, g:i a" }}</span>
+                    </li>
+                {% empty %}
+                    <p>No comments yet.</p>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Add New Comment -->
+        <div class="add-comment">
+            <form method="post" action="{% url 'posts:post_comment' post.id %}">
+                {% csrf_token %}
+                <textarea name="comment" rows="3" placeholder="Add a comment..." required></textarea>
+                <button type="submit" class="submit-comment">Post Comment</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleLike() {
+        const likeBtn = document.getElementById('like-btn');
+        const likeCount = document.getElementById('like-count');
+    
+        // Toggle 'liked' class
+        likeBtn.classList.toggle('liked');
+    
+        // Update like count
+        if (likeBtn.classList.contains('liked')) {
+            likeCount.innerText = parseInt(likeCount.innerText) + 1;
+            likeBtn.innerText = '👎 Unlike';
+        } else {
+            likeCount.innerText = parseInt(likeCount.innerText) - 1;
+            likeBtn.innerText = '👍 Like';
+        }
+    
+        // Here, you would also make an AJAX request to update the like status on the server
+    }
+    
+</script>
+{% endblock %}
+

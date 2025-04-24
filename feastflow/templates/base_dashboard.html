@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+
+
+
+{% block content %}
+    <div class="dashboard-container">
+        <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+
+        <aside class="sidebar">
+            <ul>
+                <li><a href="{% url 'users:profile' user.username %}">Profile</a></li>
+                <li><a href="{% url 'users:dashboard' %}">My Dashboard</a></li>
+                <li><a href="">My Connections</a></li>
+                <li><a href="{% url 'teams:team_dashboard' %}">Teams</a></li>
+            </ul>
+        </aside>
+
+        <section class="dashboard-main-content">
+            {% block dashboard_content %}
+            <h1>Welcome to your dashboard</h1>
+            <p>Here you can manage your profile, connections, and teams.</p>
+            {% endblock %}
+        </section>
+    </div>
+
+    <script>
+    // Sidebar toggle function
+    function toggleSidebar() {
+        const sidebar = document.querySelector('.sidebar');
+        const mainContent = document.querySelector('.dashboard-main-content');
+        sidebar.classList.toggle('collapsed');
+        mainContent.classList.toggle('collapsed');
+    }
+    </script>
+{% endblock %}
+
+
+
+
+

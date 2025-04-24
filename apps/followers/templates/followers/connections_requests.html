@@ -1,0 +1,13 @@
+{% extends 'base_dashboard.html' %}
+
+{% block dashboard_content %}
+<h2>Connection Requests</h2>
+<ul>
+    {% for request in connection_requests %}
+    <li>{{ request.user.username }} - 
+        <a href="{% url 'followers:accept_request' request.id %}">Accept</a> |
+        <a href="{% url 'followers:reject_request' request.id %}">Reject</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

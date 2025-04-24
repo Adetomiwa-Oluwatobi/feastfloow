@@ -1,0 +1,217 @@
+
+
+{% extends 'base_dashboard.html' %}
+{% load custom_filters %}
+
+{% block dashboard_content %}
+    <div class="profile-container">
+        <!-- Cover Photo Section -->
+        <div class="cover-photo">
+            {% if user_profile.user.userprofile.cover_photo %}
+                <img src="{{ user_profile.user.userprofile.cover_photo.url }}" alt="Cover Photo">
+            {% else %}
+                <div class="cover-placeholder">No cover photo available</div>
+            {% endif %}
+            <!-- Profile Picture Overlay at Bottom Left -->
+            <div class="profile-picture">
+                {% if user_profile.user.userprofile.picture %}
+                    <img src="{{ user_profile.user.userprofile.picture.url }}" alt="Profile Picture">
+                {% else %}
+                    <div class="no-picture">No profile picture available</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Profile Info Section -->
+        <div class="profile-info">
+            <h3>{{ user_profile.user.username }}</h3>
+            <p class="profile-bio">{{ user_profile.user.userprofile.bio }}</p>
+            <p><strong>Job Role:</strong> {{ user_profile.user.userprofile.job_role }}</p>
+            <p><strong>Verified:</strong> {{user_profile.user.userprofile.verified }}</p>
+            {% if user.is_authenticated and user == user_profile.user %}
+                <a href="{% url 'users:edit_profile' %}" class="edit-profile-btn">Edit Profile</a>
+            {% endif %}
+        </div>
+        
+
+        <!-- Reviews and Ratings Section -->
+        <div class="profile-reviews">
+            <h3>Average Rating: {{ average_rating|default:"No ratings yet" }} / 5 
+                ({{ reviews|length }} review{{ reviews|length|pluralize }})
+            </h3>
+
+            <!-- Display Reviews -->
+            <h3>Reviews</h3>
+            {% if reviews %}
+                <div class="swiper-container">
+                    <div class="swiper-wrapper">
+                            {% for review in reviews %}
+                                <div class="swiper-slide">  
+                                    <div class="review-header">
+                                        <div class="review-card">
+                                        {% if user.userprofile.picture %}
+                                            <img src="{{ user.userprofile.picture.url }}" alt="Profile Picture" class="review_profile-pic">
+                                        
+                                        {% else %}
+                                            <div class="profile-pic-placeholder"></div>
+                                        {% endif %}
+                                            <strong>{{ review.reviewer.user.username }}</strong>
+                                            <!-- Star Rating Display -->
+                                            <div class="review-rating">
+                                                {% for i in review.rating|range_filter %}
+                                                    <span class="star">&#9733;</span> <!-- Full star -->
+                                                {% endfor %}
+                                                {% for i in review.rating|inverse_range %}
+                                                    <span class="star empty-star">&#9734;</span> <!-- Empty star -->
+                                                {% endfor %}
+                                                
+                                                
+                                            </div>
+                                            <span class="review-date">{{ review.created_at|date:"F j, Y" }}</span>
+                                            <br>
+                                            <p class="review-content">{{ review.review_text }}</p>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                
+                                            
+                            {% endfor %}
+                            
+                    </div>
+                    
+                </div>
+                
+            {% else %}
+                <p>No reviews available.</p>
+            {% endif %}
+
+            
+        
+        </div>
+        <!-- Add Pagination or Navigation (Optional) -->
+        <div class="swiper-pagination"></div>
+        
+    
+        <!-- Add a Review Button -->
+        {% if user.is_authenticated and user != user_profile.user %}
+            <div class="review-form-link">
+                <a href="{% url 'ratingsandreviews:add_review' user_profile.id %}" class="submit-review-btn">
+                    Leave a Review
+                </a>
+            </div>
+        {% else %}
+            {% if user == user_profile.user %}
+                <p>You cannot review yourself.</p>
+            {% endif %}
+        {% endif %}
+
+        <h3>Posts</h3>
+    <div class="list-post-container">
+        {% for post in posts %}
+        <a href="{% url 'posts:post_detail' post.id %}" class="post-card">
+            <div class="list-post-image">
+                {% if post.image %}
+                <img src="{{ post.image.url }}" alt="{{ post.title }}" />
+                {% elif post.video %}
+                <video controls muted>
+                    <source src="{{ post.video.url }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                {% endif %}
+            </div>
+            <div class="list-post-content">
+                <h4>{{ post.title }}</h4>
+                <p>{{ post.content|truncatewords:20 }}</p>
+            </div>
+        </a>
+        {% empty %}
+        <p>No posts available</p>
+        {% endfor %}
+    </div>
+
+
+            <!-- User Teams -->
+            <h3>Teams</h3>
+            <ul class="teams-list">
+                {% for team in user_profile.teams.all %}
+                    <li>{{ team.name }} - <a href="{% url 'teams:team_dashboard' team.id %}">View Team</a></li>
+                {% empty %}
+                    <p>No teams found.</p>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        const swiper = new Swiper('.swiper-container', {
+            slidesPerView: 3, // Number of cards per slide
+            spaceBetween: 30, // Space between cards in px
+            pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+            },
+            navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+            },
+            loop: true, // Enable looping
+        });
+        });
+    </script>
+  
+   <!-- JavaScript for Interactive Star Rating -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const stars = document.querySelectorAll('.star-rating .star');
+            const ratingInput = document.getElementById('rating-input');
+            const ratingMessage = document.getElementById('rating-message');
+            
+            // Initialize stars based on default or stored rating
+            const initialRating = parseInt(document.querySelector('.star-rating').dataset.rating);
+            setStars(initialRating);
+            
+            stars.forEach((star, index) => {
+                // Hover effect: Highlight stars up to the hovered one
+                star.addEventListener('mouseover', function () {
+                    setStars(index + 1);
+                });
+
+                // Mouse out effect: Reset to current rating
+                star.addEventListener('mouseout', function () {
+                    setStars(parseInt(ratingInput.value) || initialRating);
+                });
+
+                // Click event: Set rating
+                star.addEventListener('click', function () {
+                    const rating = index + 1;
+                    ratingInput.value = rating;
+                    setStars(rating);
+                    displayRatingMessage(rating);
+                });
+            });
+
+            // Function to set star highlights based on rating
+            function setStars(rating) {
+                stars.forEach((star, index) => {
+                    star.classList.toggle('selected', index < rating);
+                });
+            }
+
+            // Function to display a message based on rating
+            function displayRatingMessage(rating) {
+                const messages = [
+                    "Poor",
+                    "Fair",
+                    "Good",
+                    "Very Good",
+                    "Excellent"
+                ];
+                ratingMessage.textContent = messages[rating - 1] || "";
+            }
+        });
+    </script>
+
+
+{% endblock %}

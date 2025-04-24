@@ -1,0 +1,77 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Corrected CSS links -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+
+    <title>{% block title %}FeastFlow{% endblock %}</title>
+    {% endblock %}
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <ul>
+                {% url 'users:dashboard' as dashboard_url %}
+                <li class="nav-item">
+                    <a href="{{ dashboard_url }}" class="nav-link {% if request.path == dashboard_url %}active{% endif %}">
+                        <i class="fa fa-tachometer-alt"></i><span>Dashboard</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{% url 'posts:newsfeed' %}" class="nav-link {% if request.path == '/posts/newsfeed/' %}active{% endif %}">
+                        <i class="fa fa-newspaper"></i><span>Newsfeed</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{% url 'teams:team_dashboard' %}" class="nav-link {% if request.path == '/teams/team_dashboard/' %}active{% endif %}">
+                        <i class="fa fa-users"></i><span>Teams</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{% url 'searchandfilters:search' %}" class="nav-link {% if request.path == '/search/' %}active{% endif %}">
+                        <i class="fa fa-search"></i><span>Search</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="" class="nav-link {% if request.path == 'profile/<str:username>/followers/' %}active{% endif %}">
+                        <i class="fa fa-user-friends"></i><span>Connections</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>---------------------------© 2024 FeastFlow. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // JavaScript to dynamically highlight the active nav-link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            if (link.href === window.location.href) {
+                link.classList.add('active');
+            }
+        });
+    </script>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

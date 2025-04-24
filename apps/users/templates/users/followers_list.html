@@ -1,0 +1,7 @@
+<!-- templates/users/followers_list.html -->
+<h2>{{ user.username }}'s Followers</h2>
+<ul>
+    {% for follow in followers %}
+        <li><a href="{% url 'profile' connection.follower.username %}">{{ connection.follower.username.follower.username }}</a></li>
+    {% endfor %}
+</ul>

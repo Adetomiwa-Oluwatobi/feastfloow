@@ -1,0 +1,24 @@
+{% extends 'base_dashboard.html' %}
+
+{% block dashboard_content %}
+<h2>{{ team.name }} Dashboard</h2>
+
+<!-- Create Team Button -->
+<div class="create-team-button">
+    <a href="{% url 'teams:create_team' %}" class="button">Create Team</a>
+</div>
+
+<h3>Team Members</h3>
+<ul>
+    {% for member in team.members.all %}
+        <li>{{ member.username }}</li>
+    {% endfor %}
+</ul>
+
+<h3>Pending Invitations</h3>
+<ul>
+    {% for invite in team.pending_invitations.all %}
+        <li>{{ invite.email }}</li>
+    {% endfor %}
+</ul>
+{% endblock %}
